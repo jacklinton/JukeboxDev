@@ -31,3 +31,7 @@ accounts-google
 accounts-twitter
 oauth-encryption
 jquery
+aldeed:collection2-core
+aldeed:schema-index
+aldeed:schema-deny
+aldeed:autoform
