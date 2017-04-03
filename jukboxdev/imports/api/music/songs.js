@@ -4,8 +4,25 @@ import { Meteor } from 'meteor/meteor';
 const Songs = new Mongo.Collection('songs');
 
 Meteor.methods({
-  'Songs.addOne': ({ name }) => {
-    return Songs.insert({ name });
+  'Songs.addOne': ({ name },
+  { title },
+  { creator },
+  { track },
+  { album },
+  { bitrate },
+  { length },
+  { src },
+  { image }
+  ) => {
+    return Songs.insert({ name },
+    { title },
+    { creator },
+    { track },
+    { album },
+    { bitrate },
+    { length },
+    { src },
+    { image });
   },
 });
 
@@ -15,7 +32,7 @@ Meteor.publish('songs', () => {
 
 var Schemas = {};
 
-Schemas.Songs = new SimpleSchema({
+Schemas.Song = new SimpleSchema({
   name: {
     type: String,
     label: "Identifier",
@@ -52,8 +69,11 @@ Schemas.Songs = new SimpleSchema({
     type: String,
     label: "src"
   },
-  
+  image: {
+    type: [String],
+    label: "Image"
+  }
 });
 
-Meteor.artists.attachSchema(Schema.Artist);
+Songs.attachSchema(Schemas.Song);
 export default Songs;

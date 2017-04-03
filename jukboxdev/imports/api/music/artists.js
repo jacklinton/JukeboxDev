@@ -16,7 +16,7 @@ Meteor.publish('artists', () => {
 
 var Schemas = {};
 
-Schemas.Artists = new SimpleSchema({
+Schemas.Artist = new SimpleSchema({
   name: {
     type: String,
     label: "Artist",
@@ -29,6 +29,6 @@ Schemas.Artists = new SimpleSchema({
   }
 });
 
-Meteor.artists.attachSchema(Schema.Artist);
+Artists.attachSchema(Schemas.Artist);
 
 export default Artists;

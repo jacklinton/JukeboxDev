@@ -51,7 +51,7 @@ Meteor.publish('shows', () => {
 
 var Schemas = {};
 
-Schemas.Shows = new SimpleSchema({
+Schemas.Show = new SimpleSchema({
   identifier: {
     type: String,
     label: "Identifier",
@@ -133,6 +133,6 @@ Schemas.Shows = new SimpleSchema({
   }
 });
 
-Meteor.artists.attachSchema(Schema.Artist);
+Shows.attachSchema(Schemas.Show);
 
 export default Shows;
