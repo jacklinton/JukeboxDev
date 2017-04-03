@@ -1,4 +1,5 @@
 // Register your apis here
 
-import '../../api/links/methods.js';
-import '../../api/links/server/publications.js';
+import '../../api/music/artists.js';
+import '../../api/music/shows.js';
+import '../../api/music/songs.js';

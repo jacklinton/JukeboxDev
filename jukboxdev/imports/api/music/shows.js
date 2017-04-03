@@ -133,6 +133,50 @@ Schemas.Show = new SimpleSchema({
   }
 });
 
+Schemas.Song = new SimpleSchema({
+  name: {
+    type: String,
+    label: "Identifier",
+    unique: true,
+    index: true
+  },
+  title: {
+    type: String,
+    label: "Title",
+    index: true
+  },
+  creator: {
+    type: String,
+    label: "Artist",
+    index: true
+  },
+  track: {
+    type: Number,
+    label: "Track"
+  },
+  album: {
+    type: String,
+    label: "Album"
+  },
+  bitrate: {
+    type: String,
+    label: "Bitrate"
+  },
+  length: {
+    type: String,
+    label: "Length"
+  },
+  src: {
+    type: String,
+    label: "src"
+  },
+  image: {
+    type: [String],
+    label: "Image"
+  }
+});
+
+Shows.attachSchema(Schemas.Song);
 Shows.attachSchema(Schemas.Show);
 
 export default Shows;

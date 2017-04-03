@@ -1,34 +1,35 @@
 // Fill the DB with example data on startup
 
+import { request } from 'request';
 import { Meteor } from 'meteor/meteor';
-import { Links } from '../../api/links/links.js';
+import { Artists } from '../../api/music/artists';
+import { Shows } from '../../api/music/shows';
+import { Songs } from '../../api/music/songs';
 
 Meteor.startup(() => {
-  // if the Links collection is empty
-  if (Links.find().count() === 0) {
-    const data = [
-      {
-        title: 'Do the Tutorial',
-        url: 'https://www.meteor.com/try',
-        createdAt: new Date(),
-      },
-      {
-        title: 'Follow the Guide',
-        url: 'http://guide.meteor.com',
-        createdAt: new Date(),
-      },
-      {
-        title: 'Read the Docs',
-        url: 'https://docs.meteor.com',
-        createdAt: new Date(),
-      },
-      {
-        title: 'Discussions',
-        url: 'https://forums.meteor.com',
-        createdAt: new Date(),
-      },
-    ];
+  if (Show.find().count() === 0) {
+    const identifier = "gd1982-10-10.sbd.miller.110628.flac24";
+    const url = "https://archive.org/metadata/" + identifier;
+    const getShow = async () => {
+      let show
+      await request(url, (er, res, body) => {
+        show = JSON.parse(body);
+      });
+      let metaD = await show.metadata;
+      let files = await show.files;
+      let mp3s = await files.filter( (i) => { return i.name.endsWith('mp3') });
+      let images = await files.filter( (i) => { return i.name.endsWith('jpg' || 'jpeg') });
+    }
+      getShow()
+      console.time('DB_Seed');
+      console.log('Seeding DB...');
 
-    data.forEach(link => Links.insert(link));
+      Artists.insert({ 'Grateful Dead' }, { 'GratefulDead' });
+      Shows.insert({songs: mp3s},
+                    ...metaD);
+      mp3s.forEach( (i) => {
+          Songs.insert({ src: "http://www.archive.org/download/" + identifier + "/" + i.name },
+                      { images },
+                        ...i);
   }
 });
