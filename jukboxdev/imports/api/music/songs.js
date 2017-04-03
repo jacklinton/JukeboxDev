@@ -1,5 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
+import SimpleSchema from 'simpl-schema';
 
 const Songs = new Mongo.Collection('songs');
 
@@ -35,9 +36,7 @@ var Schemas = {};
 Schemas.Song = new SimpleSchema({
   name: {
     type: String,
-    label: "Identifier",
-    unique: true,
-    index: true
+    label: "Identifier"
   },
   title: {
     type: String,
@@ -55,7 +54,8 @@ Schemas.Song = new SimpleSchema({
   },
   album: {
     type: String,
-    label: "Album"
+    label: "Album",
+    index: true
   },
   bitrate: {
     type: String,
@@ -67,13 +67,18 @@ Schemas.Song = new SimpleSchema({
   },
   src: {
     type: String,
-    label: "src"
+    label: "src",
+    index: true
   },
   image: {
-    type: [String],
-    label: "Image"
+    type: Array,
+    label: "Image",
+    optional: true
+  },
+  "image.$": {
+    type: String
   }
 });
-
 Songs.attachSchema(Schemas.Song);
+
 export default Songs;

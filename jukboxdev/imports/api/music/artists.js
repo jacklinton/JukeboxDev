@@ -19,9 +19,7 @@ var Schemas = {};
 Schemas.Artist = new SimpleSchema({
   name: {
     type: String,
-    label: "Artist",
-    index: true,
-    unique: true
+    label: "Artist"
   },
   collection: {
     type: String,

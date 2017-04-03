@@ -1,7 +1,10 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
+import SimpleSchema from 'simpl-schema';
+
 
 const Shows = new Mongo.Collection('shows');
+
 
 Meteor.methods({
   'Shows.addOne': ({ identifier },
@@ -55,16 +58,17 @@ Schemas.Show = new SimpleSchema({
   identifier: {
     type: String,
     label: "Identifier",
+    index: true,
     unique: true
   },
   title: {
     type: String,
-    label: "Title"
+    label: "Title",
+    index:true
   },
   creator: {
     type: String,
-    label: "Artist",
-    index: true
+    label: "Artist"
   },
   description: {
     type: String,
@@ -72,7 +76,8 @@ Schemas.Show = new SimpleSchema({
   },
   date: {
     type: String,
-    label: "Date"
+    label: "Date",
+    optional:true
   },
   year: {
     type: String,
@@ -86,7 +91,8 @@ Schemas.Show = new SimpleSchema({
   },
   uploader: {
     type: String,
-    label: "Uploader"
+    label: "Uploader",
+    required: false
   },
   venue: {
     type: String,
@@ -99,11 +105,13 @@ Schemas.Show = new SimpleSchema({
   },
   taper: {
     type: String,
-    label: "Taper"
+    label: "Taper",
+    optional:true
   },
   transferer: {
     type: String,
-    label: "Transferer"
+    label: "Transferer",
+    optional:true
   },
   runtime: {
     type: String,
@@ -114,69 +122,23 @@ Schemas.Show = new SimpleSchema({
     label: "Show Notes"
   },
   source: {
-    type: String
+    type: String,
     label: "Source"
-  }
+  },
   sbd: {
     type: Boolean,
-    label: "SBD"
-    index: true
-  },
-  songs: {
-    type: [Object],
-    label: "Songs"
+    label: "SBD",
+    index:true,
+    optional:true,
   },
   updateddate: {
     type: String,
     label: "Updated Date",
-    index: true
+    required: false
   }
 });
 
-Schemas.Song = new SimpleSchema({
-  name: {
-    type: String,
-    label: "Identifier",
-    unique: true,
-    index: true
-  },
-  title: {
-    type: String,
-    label: "Title",
-    index: true
-  },
-  creator: {
-    type: String,
-    label: "Artist",
-    index: true
-  },
-  track: {
-    type: Number,
-    label: "Track"
-  },
-  album: {
-    type: String,
-    label: "Album"
-  },
-  bitrate: {
-    type: String,
-    label: "Bitrate"
-  },
-  length: {
-    type: String,
-    label: "Length"
-  },
-  src: {
-    type: String,
-    label: "src"
-  },
-  image: {
-    type: [String],
-    label: "Image"
-  }
-});
-
-Shows.attachSchema(Schemas.Song);
 Shows.attachSchema(Schemas.Show);
+
 
 export default Shows;
