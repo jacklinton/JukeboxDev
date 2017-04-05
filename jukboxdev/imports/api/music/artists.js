@@ -16,17 +16,17 @@ Meteor.publish('artists', () => {
 
 var Schemas = {};
 
-Schemas.Artist = new SimpleSchema({
-  name: {
-    type: String,
-    label: "Artist"
-  },
-  collection: {
-    type: String,
-    label: "Collection"
-  }
-});
-
-Artists.attachSchema(Schemas.Artist);
+// Schemas.Artist = new SimpleSchema({
+//   name: {
+//     type: String,
+//     label: "Artist"
+//   },
+//   collection: {
+//     type: String,
+//     label: "Collection"
+//   }
+// });
+//
+// Artists.attachSchema(Schemas.Artist);
 
 export default Artists;

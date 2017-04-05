@@ -36,3 +36,4 @@ service-configuration
 aldeed:collection2-core
 aldeed:schema-index
 http
+mikowals:batch-insert
