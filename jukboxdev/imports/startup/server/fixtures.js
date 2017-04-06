@@ -1,4 +1,5 @@
 // Fill the DB with example data on startup
+import { EJSON } from 'meteor/ejson';
 import { HTTP } from 'meteor/http';
 import { Meteor } from 'meteor/meteor';
 import Artists from '../../api/music/artists';
@@ -7,8 +8,8 @@ import Songs from '../../api/music/songs';
 
 Meteor.startup(() => {
   if (Shows.find().count() === 0) {
-    const scrape = 'https://archive.org/services/search/v1/scrape?debug=false&xvar=production&total_only=false&count=10000&fields=identifier&q=';
-    var collection = 'TeaLeafGreen';
+    const scrape = 'https://archive.org/services/search/v1/scrape?debug=false&xvar=production&total_only=false&count=10000&sorts=identifier%20desc&fields=identifier&q=';
+    var collection = 'SoundTribeSector9';
     var scraper = scrape + collection;
     var identifier;
     var Item = new Promise((resolve, reject) => {
@@ -23,13 +24,13 @@ Meteor.startup(() => {
             identifier = item.identifier;
             let url;
 
-              if (identifier.startsWith('tlg') || identifier.startsWith('TLG') || identifier.startsWith('TeaLeafGreen') ) {
+              if (identifier.startsWith('sts') || identifier.startsWith('SoundTribe') || identifier.startsWith('STS')/* || identifier.startsWith('tDB')|| identifier.startsWith('discob') || identifier.startsWith('discobiscuits')*/) {
                 url = "https://archive.org/metadata/" + identifier;
-
+                return url;
               } else {
-                return url='';
+                return "https://archive.org/metadata/";
               }
-            return url;
+
           });
         resolve(shows);
       });
@@ -37,22 +38,20 @@ Meteor.startup(() => {
     Shows.then((shows) => {
       console.log(shows);
 
-          shows.forEach((url) => {
+      shows.forEach((url) => {
 
             var tune;
-
             HTTP.call('GET', url, async (error, res) => {
-                  if(!error){
-               tune = await res.data;
-              // await  console.log(tune);
-               var metaD = await tune['metadata'];
-               console.log(tune);
-                // var sbd = metaD.source.includes( 'SBD'||'sbd'||'soundboard'||'Soundboard' );
+              tune = await res.data;
+              show = await EJSON.fromJSONValue(tune)
+
+              var metaD = await show.metadata;
+              var sbd = await metaD.source.includes( 'SBD'||'sbd'||'soundboard'||'Soundboard' );
               var files = await tune.files;
               var mp3s = await files.filter( (i) => { return i.name.endsWith('mp3') });
-              var images = await files.filter( (i) => { return i.name.endsWith('jpg' || 'jpeg') });
+              var images = await files.filter( (i) => { return i.name.endsWith('jpg') || i.name.endsWith('jpeg') });
 
-              await  mp3s.forEach( (song) => {
+              await mp3s.forEach((song) => {
                     Songs.insert({ src: "http://www.archive.org/download/" + identifier + "/" + song.name,
                       name: song.name,
                       title: song.title,
@@ -62,13 +61,44 @@ Meteor.startup(() => {
                       bitrate: song.bitrate,
                       length: song.length,
                       image: images,
-                      metaD
+                      sbd: sbd,
+                      metadata: metaD,
                   })
                 });
-               };
-            });
+          // HTTP.call('GET', url, async (error, res) => {
+          //   tune = await res.data;
+          //   show = await EJSON.fromJSONValue(tune)
+          //   var metaD = await show.metadata;
+          //   await Shows.insert({identifier: metaD.identifier,
+          //        title: metaD.title,
+          //        name: metaD.name,
+          //        creator: metaD.creator,
+          //        description: metaD.description,
+          //        date: metaD.date,
+          //        year: metaD.year,
+          //        addeddate: metaD.addeddate,
+          //        uploader: metaD.uploader,
+          //        venue: metaD.venue,
+          //        coverage: metaD.coverage,
+          //        taper: metaD.taper,
+          //        transferer: metaD.transferer,
+          //        runtime: metaD.runtime,
+          //        notes: metaD.notes,
+          //        source: metaD.source,
+          //        sbd: sbd,
+          //        songs:[mp3s.forEach((mp3) => {
+          //          mp3.name,
+          //          mp3.title,
+          //          mp3.track,
+          //          mp3.album,
+          //          mp3.length
+          //        })],
+          //        updateddate: metaD.updateddate,
+          //     })
+          //   });
           });
-
+          console.log("DONE");
+        });
       });
     });
-  }});
+}});

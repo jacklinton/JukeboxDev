@@ -17,7 +17,8 @@ Meteor.methods({
   bitrate,
   length,
   src,
-  image
+  image,
+  metadata
 }) => {
     return Songs.insert({ name,
     title,
@@ -27,7 +28,8 @@ Meteor.methods({
     bitrate,
     length,
     src,
-    image
+    image,
+    metadata
   });
   },
 
